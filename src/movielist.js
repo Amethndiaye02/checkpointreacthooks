@@ -1,14 +1,15 @@
+// MovieList.js
 import React from 'react';
 import MovieCard from './moviecard';
 
-const MovieList = ({ movies }) => {
+const MovieList = ({ movies, onWatchTrailer }) => {
   return (
-    <div className="movie-list">
-      {movies.map((movie, index) => (
-        <MovieCard key={index} movie={movie} />
+    <div>
+      {movies.map(movie => (
+        <MovieCard key={movie.title} movie={movie} onWatchTrailer={onWatchTrailer} />
       ))}
     </div>
   );
-}
+};
 
 export default MovieList;

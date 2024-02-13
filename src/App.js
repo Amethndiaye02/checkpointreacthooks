@@ -1,36 +1,52 @@
 // App.js
 import React, { useState } from 'react';
 import MovieList from './movielist';
-import Filter from './Filter';
-import { moviesData } from './moviesdata';
 
 const App = () => {
-  const [movies] = useState(moviesData);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [minRating, setMinRating] = useState('');
+  const [showDetails, setShowDetails] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
+  const movieData = [
+    { 
+      title: "Baabel",
+      description: "Description for Baabel.",
+      posterURL: "https://example.com/baabel-poster.jpg",
+      rating: "8.5",
+      trailerURL: "https://www.youtube.com/embed/BaabelTrailer"
+    },
+    { 
+      title: "Saneex & Locataires",
+      description: "Description for Saneex & Locataires.",
+      posterURL: "https://example.com/saneex-poster.jpg",
+      rating: "7.9",
+      trailerURL: "https://www.youtube.com/embed/SaneexTrailer"
+    }
+  ];
+
+  const handleWatchTrailer = (movie) => {
+    setSelectedMovie(movie);
+    setShowDetails(true);
   };
 
-  const handleRating = (event) => {
-    setMinRating(event.target.value);
+  const handleBack = () => {
+    setShowDetails(false);
   };
-
-  const filteredMovies = movies.filter(movie => {
-    return (
-      movie.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (!minRating || movie.rating >= minRating)
-    );
-  });
 
   return (
-    <div className="app">
-      <Filter handleSearch={handleSearch} handleRating={handleRating} />
-      <MovieList movies={filteredMovies} />
+    <div>
+      <h1>Movie App</h1>
+      {!showDetails ? (
+        <MovieList movies={movieData} onWatchTrailer={handleWatchTrailer} />
+      ) : (
+        <div>
+          <button onClick={handleBack}>Back</button>
+          <h2>{selectedMovie.title}</h2>
+          <p>{selectedMovie.description}</p>
+          <iframe width="560" height="315" src={selectedMovie.trailerURL} title="trailer" allowFullScreen />
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default App;
-
